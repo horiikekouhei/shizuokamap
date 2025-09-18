@@ -2,19 +2,22 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Leaflet + CSV + MarkerCluster</title>
+  <title>静岡駅周辺マップ</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
   <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
     #map {
-      height: 100vh;
+      height: 100%;
       width: 100%;
     }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center">CSVデータをLeafletで表示（クラスタ対応）</h2>
   <div id="map"></div>
 
   <!-- Leaflet本体 -->
@@ -25,20 +28,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
   <script>
-    // ======== 設定部分 ========
+    // CSVファイルURL（Netlify側に置く場合は ./data.csv）
     const csvUrl = "https://raw.githubusercontent.com/horiikekouhei/shizuokamap/main/public/data.csv";
 
-    // ======== 地図の初期化（静岡駅にアップして表示） ========
+    // 地図初期化（静岡駅にズームアップ）
     const map = L.map('map').setView([34.9719, 138.3889], 17);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // クラスターレイヤーを作成
+    // クラスターレイヤー作成
     const markers = L.markerClusterGroup();
 
-    // ======== CSV読み込みとマーカー作成 ========
+    // CSV読み込みとマーカー作成
     Papa.parse(csvUrl, {
       download: true,
       header: true,
@@ -50,9 +53,7 @@
             if (!isNaN(lat) && !isNaN(lng)) {
               const marker = L.marker([lat, lng]);
               marker.bindPopup(
-                `<b>${row["情報名"]}</b><br>
-                 受信日: ${row["受信日"]}<br>
-                 状態: ${row["状態"]}`
+                `<b>${row["情報名"]}</b><br>受信日: ${row["受信日"]}<br>状態: ${row["状態"]}`
               );
               markers.addLayer(marker);
             }
