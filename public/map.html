@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   <style>
     body, html {
       height: 100%;
@@ -26,22 +27,29 @@
   <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
   <!-- PapaParse（CSV読み込み用） -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <!-- Leaflet Control Geocoder -->
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
   <script>
-    // CSVファイルURL（Netlify側に置く場合は ./data.csv）
+    // ======== 設定 ========
     const csvUrl = "https://raw.githubusercontent.com/horiikekouhei/shizuokamap/main/public/data.csv";
 
-    // 地図初期化（静岡駅にズームアップ）
+    // ======== 地図初期化（静岡駅にアップして表示） ========
     const map = L.map('map').setView([34.9719, 138.3889], 17);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // クラスターレイヤー作成
+    // ======== 位置検索機能を追加 ========
+    L.Control.geocoder({
+      defaultMarkGeocode: true,
+      placeholder: "検索したい住所や施設名を入力"
+    }).addTo(map);
+
+    // ======== CSVデータ読み込み＆クラスターレイヤー作成 ========
     const markers = L.markerClusterGroup();
 
-    // CSV読み込みとマーカー作成
     Papa.parse(csvUrl, {
       download: true,
       header: true,
