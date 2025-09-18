@@ -1,7 +1,0 @@
-.DS_Store
-.env
-
-# Local Netlify folder
-.netlify
-
-public/data/log/*
