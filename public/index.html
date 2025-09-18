@@ -27,10 +27,10 @@
   <script>
     // ======== 設定部分 ========
     // GitHub上のCSVファイルのRaw URLを指定してください
-    const csvUrl = "https://github.com/horiikekouhei/shizuokamap/blob/main/data.csv";
+    const csvUrl = "https://raw.githubusercontent.com/ユーザー名/リポジトリ名/main/data.csv";
 
-    // ======== 地図の初期化 ========
-    const map = L.map('map').setView([35.0, 135.0], 5);
+    // ======== 地図の初期化（静岡駅に設定） ========
+    const map = L.map('map').setView([34.9719, 138.3889], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
