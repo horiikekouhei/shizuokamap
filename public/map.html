@@ -28,10 +28,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
   <script>
-    // CSVファイルURL
+    // CSVファイルURL（Netlify側に置く場合は ./data.csv）
     const csvUrl = "https://raw.githubusercontent.com/horiikekouhei/shizuokamap/main/public/data.csv";
 
-    // 地図初期化（静岡駅付近）
+    // 地図初期化（静岡駅にズームアップ）
     const map = L.map('map').setView([34.9719, 138.3889], 17);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -46,4 +46,22 @@
       download: true,
       header: true,
       complete: function(results) {
-        results.data.forEa
+        results.data.forEach(row => {
+          if (row["緯度"] && row["経度"]) {
+            const lat = parseFloat(row["緯度"]);
+            const lng = parseFloat(row["経度"]);
+            if (!isNaN(lat) && !isNaN(lng)) {
+              const marker = L.marker([lat, lng]);
+              marker.bindPopup(
+                `<b>${row["情報名"]}</b><br>受信日: ${row["受信日"]}<br>状態: ${row["状態"]}`
+              );
+              markers.addLayer(marker);
+            }
+          }
+        });
+        map.addLayer(markers);
+      }
+    });
+  </script>
+</body>
+</html>
